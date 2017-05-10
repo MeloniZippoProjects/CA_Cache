@@ -13,9 +13,8 @@ foreach( $filename in $targetFilenames)
 
     foreach($cfg in $cfgs)
     {
-	cd $cfg.DirectoryName;
+        cd $cfg.DirectoryName;
         $expression = $executablePath + ' -infile ' + $cfg.FullName + ' > ' + ( $filename + $outExtension );
-	#Write-Host $expression;
         Invoke-Expression $expression;
     }
 
