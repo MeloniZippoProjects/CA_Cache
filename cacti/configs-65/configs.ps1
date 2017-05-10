@@ -2,7 +2,7 @@ $setting = "-size (bytes)";
 $matchSetting = '-size';
 
 $insertPosition = 1;
-$toInsert = ( "33554432", "67108864", "268435456", "1073741824", "8589934592" );
+$toInsert = ( "32768", "65536", "262144", "1048576", "8388608" );
 
 $originFilename = "cache.cfg";
 $backupFilename = "cache.cfg.bk";
@@ -10,6 +10,8 @@ $cleanFilename = "cleaned_cache.cfg";
 $targetFilenames = ( "32k", "64k", "256k", "1m", "8m" );
 
 $files = Get-ChildItem -Recurse -Filter $originFilename;
+
+$root = pwd;
 
 foreach( $file in $files)
 {
@@ -25,3 +27,5 @@ foreach( $file in $files)
         $content | Set-Content -Path ($targetFilenames[$idx] + ".cfg");
     }
 }
+
+cd $root;
