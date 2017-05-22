@@ -1,0 +1,19 @@
+Ispirarsi arm alte prestazioni per cache piccola
+
+
+//TODO - associatività 4
+
+per 32k (L1) access mode = fast, 2 e 4 vie
+
+per 64k sia fast che sequential, 4 e 8 vie
+
+per più grosse access mode = sequential; l'access time è la somma del tempo di accesso ai tag + data, controllare tag access array
+
+per tutte le altre 4 e 8 vie
+
+
+
+chiarire cosa è weight delay nel design objective per UCA
+
+togliere ECC (prima capire)
+
