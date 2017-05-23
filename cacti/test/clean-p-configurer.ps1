@@ -48,7 +48,7 @@
 	function substituteLine($content, $placeholder, $newLine)
 	{
 		$matches = ( $content | Select-String -Pattern $placeholder -CaseSensitive);
-     	$tempContent = $content;
+     	$tempContent = $content.Clone();
      	$tempContent[($matches[0]).LineNumber - 1] = $newLine;
      	$tempContent
 	}
@@ -64,11 +64,11 @@
         #For transistor types...
         for( $typeIndex = 0; $typeIndex -lt $typeSettingValues.length; $typeIndex++)
         {
-        	$typeLevelContent = $techLevelContent;
+        	$typeLevelContent = $techLevelContent.Clone();
         	
         	for( $typeSettingIndex = 0; $typeSettingIndex -lt $typeSettingPlaceholders.length; $typeSettingIndex++)
         	{
-    		$typeLevelContent = substituteLine $techLevelContent $typeSettingPlaceholders[$typeSettingIndex] ($typeSettingLines[$typeSettingIndex] + $typeSettingValues[$typeIndex]);
+    		$typeLevelContent = substituteLine $typeLevelContent $typeSettingPlaceholders[$typeSettingIndex] ($typeSettingLines[$typeSettingIndex] + $typeSettingValues[$typeIndex]);
         	}
 
         	mkdir -Force $typeFolderNames[$typeIndex];
