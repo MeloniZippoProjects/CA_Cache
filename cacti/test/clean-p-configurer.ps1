@@ -58,7 +58,8 @@
 	{
 		$techLevelContent = substituteLine $cleanContent $techSettingPlaceholder ($techSettingLine + $techSettingValues[$techIndex]);
 
-        mkdir -Force $techFolderNames[$techIndex];
+        New-Item $techFolderNames[$techIndex] -type directory -Force ;
+	$techLevelDir = pwd;
         cd $techFolderNames[$techIndex];
 
         #For transistor types...
@@ -71,8 +72,9 @@
     		$typeLevelContent = substituteLine $typeLevelContent $typeSettingPlaceholders[$typeSettingIndex] ($typeSettingLines[$typeSettingIndex] + $typeSettingValues[$typeIndex]);
         	}
 
-        	mkdir -Force $typeFolderNames[$typeIndex];
-        	cd $typeFolderNames[$typeIndex];
+        	New-Item $typeFolderNames[$typeIndex] -type directory -force ;
+        	$typeLevelDir = pwd;
+		cd $typeFolderNames[$typeIndex];
 
         	#For cache sizes...
         	for( $sizeIndex = 0; $sizeIndex -lt $sizeSettingValues.length; $sizeIndex++)
@@ -97,8 +99,8 @@
         		}
         	}
 
-        	cd ..
+        	cd $typeLevelDir;
         }
 
-        cd ..
+        cd $techLevelDir;
 	}
