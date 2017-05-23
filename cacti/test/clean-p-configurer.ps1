@@ -12,7 +12,7 @@
 	#Transistors type
 		$typeFolderNames = ( "hp", "lop", "lstp" );
 		$typeSettingLines = ( "-Data array cell type - ", "-Data array peripheral type - ", "-Tag array cell type - ", "-Tag array peripheral type - ");
-		$typeSettingValues = ( '`"itrs-hp`"', '`"itrs-lop`"', '`"itrs-lstp`"');
+		$typeSettingValues = ( '"itrs-hp"', '"itrs-lop"', '"itrs-lstp"');
 		$typeSettingPlaceholders = ( "DATA_ARRAY_CELL_TYPE", "DATA_ARRAY_PERIPH_TYPE", "TAG_ARRAY_CELL_TYPE", "TAG_ARRAY_PERIPH_TYPE");
 
 	#Sizes
@@ -89,7 +89,7 @@
         			$accessModeValues = $accessModeAggregateValues[$sizeFileNames[$sizeIndex]];
 	        		for( $accessModeIndex = 0; $accessModeIndex -lt $accessModeValues.length; $accessModeIndex++)
 	        		{
-	        			$accessModeLevelContent = substituteLine $associativityLevelContent $accessModePlaceholder ($accessModeSettingLine + $accessModeValues[$accessModeIndex]);
+	        			$accessModeLevelContent = substituteLine $associativityLevelContent $accessModePlaceholder ($accessModeSettingLine + '"' + $accessModeValues[$accessModeIndex] + '"');
 
 	        			$filename = $sizeFileNames[$sizeIndex] + "_" + $associativityValues[$associativityIndex] + "_" + $accessModeValues[$accessModeIndex] + ".cfg";
 	        			Set-Content -Value $accessModeLevelContent -Path $filename;
