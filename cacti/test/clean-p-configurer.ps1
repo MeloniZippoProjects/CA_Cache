@@ -33,11 +33,11 @@
 
 	#Access mode
 		$accessModeAggregateValues = @{};
-			$accessModeAggregateValues["32k"] 	= ("fast");
-			$accessModeAggregateValues["64k"] 	= ("fast", "sequential");
-			$accessModeAggregateValues["256k"]	= ("sequential");
-			$accessModeAggregateValues["1m"] 	= ("sequential");
-			$accessModeAggregateValues["8m"] 	= ("sequential");
+			$accessModeAggregateValues["32k"] 	= @("fast");
+			$accessModeAggregateValues["64k"] 	= @("fast", "sequential");
+			$accessModeAggregateValues["256k"]	= @("sequential");
+			$accessModeAggregateValues["1m"] 	= @("sequential");
+			$accessModeAggregateValues["8m"] 	= @("sequential");
 		$accessModeSettingLine = "-access mode (normal, sequential, fast) - ";
 		$accessModePlaceholder = "ACCESSMODE";
 
@@ -47,50 +47,49 @@
 
 	function substituteLine($content, $placeholder, $newLine)
 	{
-		$matches = Select-String $content -Pattern $placeholder;
-        $content[($matches[0]).LineNumber - 1] = $newLine;
-        return $content;
+		$matches = ( $content | Select-String -Pattern $placeholder -CaseSensitive);
+     	$tempContent = $content;
+     	$tempContent[($matches[0]).LineNumber - 1] = $newLine;
+     	$tempContent
 	}
 
 	#For tech nodes...
-	for( $techIndex = 0; $techIndex -lt $nodeFolderNames.length; $techIndex++)
+	for( $techIndex = 0; $techIndex -lt $techFolderNames.length; $techIndex++)
 	{
-		$techLevelContent = substituteLine( $cleanContent, 
-			$techSettingPlaceholder, 
-			$techSettingLine + $techSettingValues[$techIndex] );
+		$techLevelContent = substituteLine $cleanContent $techSettingPlaceholder ($techSettingLine + $techSettingValues[$techIndex]);
 
         mkdir -Force $techFolderNames[$techIndex];
         cd $techFolderNames[$techIndex];
 
         #For transistor types...
-        for( $typeIndex = 0; $typeIndex < $typeSettingValues.length; $typeIndex++)
+        for( $typeIndex = 0; $typeIndex -lt $typeSettingValues.length; $typeIndex++)
         {
         	$typeLevelContent = $techLevelContent;
         	
-        	foreach( $typeSettingIndex = 0; $typeSettingIndex -lt $typeSettingPlaceholders.length; $typeSettingIndex++)
+        	for( $typeSettingIndex = 0; $typeSettingIndex -lt $typeSettingPlaceholders.length; $typeSettingIndex++)
         	{
-    		$typeLevelContent = substituteLine($techLevelContent, $typeSettingPlaceholders[$typeSettingIndex], $typeSettingLines[$typeSettingIndex] + $typeSettingValues[$typeIndex]);
+    		$typeLevelContent = substituteLine $techLevelContent $typeSettingPlaceholders[$typeSettingIndex] ($typeSettingLines[$typeSettingIndex] + $typeSettingValues[$typeIndex]);
         	}
 
         	mkdir -Force $typeFolderNames[$typeIndex];
-        	cd $typeFolderNames[%typeIndex];
+        	cd $typeFolderNames[$typeIndex];
 
         	#For cache sizes...
         	for( $sizeIndex = 0; $sizeIndex -lt $sizeSettingValues.length; $sizeIndex++)
         	{
-        		$sizeLevelContent = substituteLine($typeLevelContent, $sizeSettingPlaceholder, $sizeSettingLine + $sizeSettingValues[$sizeIndex]);
+        		$sizeLevelContent = substituteLine $typeLevelContent $sizeSettingPlaceholder ($sizeSettingLine + $sizeSettingValues[$sizeIndex]);
 
         		#For associativity...
         		$associativityValues = $associativityAggregateValues[$sizeFileNames[$sizeIndex]];
         		for( $associativityIndex = 0; $associativityIndex -lt $associativityValues.length; $associativityIndex++)
         		{
-        			$associativityLevelContent = substituteLine($sizeLevelContent, $associativityPlaceholder, $associativitySettingLine + $associativityValues[$associativityIndex]);
+        			$associativityLevelContent = substituteLine $sizeLevelContent $associativityPlaceholder ($associativitySettingLine + $associativityValues[$associativityIndex]);
 
         			#For access modes...
         			$accessModeValues = $accessModeAggregateValues[$sizeFileNames[$sizeIndex]];
 	        		for( $accessModeIndex = 0; $accessModeIndex -lt $accessModeValues.length; $accessModeIndex++)
 	        		{
-	        			$accessModeLevelContent = substituteLine($associativityLevelContent, $accessModePlaceholder, $accessModeSettingLine + $accessModeValues[$accessModeIndex]);
+	        			$accessModeLevelContent = substituteLine $associativityLevelContent $accessModePlaceholder ($accessModeSettingLine + $accessModeValues[$accessModeIndex]);
 
 	        			$filename = $sizeFileNames[$sizeIndex] + "_" + $associativityValues[$associativityIndex] + "_" + $accessModeValues[$accessModeIndex] + ".cfg";
 	        			Set-Content -Value $accessModeLevelContent -Path $filename;
