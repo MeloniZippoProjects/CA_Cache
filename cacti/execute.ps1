@@ -1,17 +1,26 @@
-$executablePath = "~/CA_Cache/cacti/cactip";
+# CONFIGURATION
+    $executablePath = "~/CA_Cache/cacti/cactip";
+    $targetFolder = "~/CA_Cache/cacti/configs-p"
 
-$targetFilenames = ( "32k", "64k", "256k", "1m", "8m" );
+    $cfgFilter = "*.cfg";
+    $outExtension = ".txt";
 
-$cfgExtension = ".cfg";
-$outExtension = ".txt";
+# EXECUTION
 
-foreach( $filename in $targetFilenames)
-{
-    $cfgs = Get-ChildItem -Recurse -Filter ($filename + $cfgExtension);
+    $cfgs = Get-ChildItem -Recurse -Filter ( $cfgFilter );
 
-    foreach($cfg in $cfgs)
+    $root = pwd;
+    $progressCounter = 1;
+
+    foreach( $cfg in $cfgs )
     {
-        $expression = $executablePath + ' -infile ' + $cfg.DirectoryName + ' > ' + ( $filename + $outExtension );
+        Write-Host ( "Processing " + $progressCounter + " out of " + $cfgs.length + "...");
+
+        cd $cfg.DirectoryName
+        $expression = $executablePath + ' -infile ' + $cfg.FullName + ' > ' + ( $cfg.Name + $outExtension );
         Invoke-Expression $expression;
+
+        $progressCounter++;
     }
-}
+
+    cd $root;
