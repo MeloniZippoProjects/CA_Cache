@@ -1,11 +1,13 @@
 # CONFIGURATION
-    $executablePath = "~/CA_Cache/cacti/cactip";
-    $targetFolder = "~/CA_Cache/cacti/configs-p"
+    $executablePath = "~/CA_Cache/cacti/cacti65";
+    $targetFolder = "~/CA_Cache/cacti/configs-65"
 
     $cfgFilter = "*.cfg";
     $outExtension = ".txt";
 
 # EXECUTION
+
+	cd $targetFolder;
 
     $cfgs = Get-ChildItem -Recurse -Filter ( $cfgFilter );
 

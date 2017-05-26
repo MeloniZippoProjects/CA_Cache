@@ -1,13 +1,13 @@
 # CONFIGURATION
     $baseConfigPath = "~/CA_Cache/cacti/clean-p.cfg";
-    $targetConfigsFolder = "~CA_Cache/cacti/configs-p";
+    $targetConfigsFolder = "~/CA_Cache/cacti/configs-p";
 
 # DATA
 
     # Technology nodes
-        $techFolderNames = ("22nm", "32nm");
+        $techFolderNames = @("22nm", "32nm");
         $techSettingLine = "-technology (u) ";
-        $techSettingValues = ( "0.022", "0.032" );
+        $techSettingValues = @( "0.022", "0.032" );
         $techSettingPlaceholder = "TECHNODE";
 
     # Transistor types
